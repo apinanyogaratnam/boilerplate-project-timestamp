@@ -25,8 +25,24 @@ app.get("/api/hello", function (req, res) {
 
 app.get("/api/:date", function(req, res) {
   var inputDate = req.params.date;
-  const date = new Date(inputDate);
-  res.json({"unix": date.valueOf(), "utc": date.toGMTString()});
+  if (inputDate.match(/\d{5,}/)) {
+    inputDate = +inputDate;
+
+    return res.json({
+      unix: inputDate,
+      utc: new Date(inputDate).toUTCString()
+    });
+  }
+  let date = new Date(inputDate);
+  if (date.toUTCString() == 'Invalid Date') {
+    res.json({error: 'Invalid Date'});
+  }
+  res.json({unix: date.valueOf(), utc: date.toUTCString()});
+});
+
+app.get("/api", function(req, res) {
+  let date = new Date();
+  res.json({unix: date.valueOf(), utc: date.toUTCString()});
 });
 
 
