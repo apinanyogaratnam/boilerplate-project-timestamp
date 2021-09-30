@@ -1,6 +1,5 @@
 // server.js
 // where your node app starts
-
 // init project
 var express = require('express');
 var app = express();
@@ -24,6 +23,11 @@ app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
+app.get("/api/:date", function(req, res) {
+  var inputDate = req.params.date;
+  const date = new Date(inputDate);
+  res.json({"unix": date.valueOf(), "utc": date.toGMTString()});
+});
 
 
 // listen for requests :)
